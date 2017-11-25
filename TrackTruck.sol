@@ -142,4 +142,8 @@ contract TrackTruck {
     returns(bool) {
        stateInPlace[_cargoId] = cargoState.Delivered; 
     }
+    
+    function getCargoStatus(uint _id) public returns(cargoState) {
+        return stateInPlace[_id];
+    }
 }
