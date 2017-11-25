@@ -26,17 +26,20 @@ contract TrackTruck {
     mapping(uint => Cargo) cargos;
     mapping(uint => Place) places;
     mapping(uint256 => cargoState) stateInPlace; // cargo Id -> state
+    
     uint public placeAmount = 0;
     uint256 public cargoAmount = 0;
     uint public companyAmount = 0;
-    address public flowerAddress = 0xC0a618ABC30DE498D63166Ebcd44892e6a4faC28;
-    address public medicineAddress = 0x58c244BE7De8E64a7f9F7b0EE55b93160D4dB804;
-    address public worker1 = 0xCa396fc7c6a79b63DC70A27b52cCAf98ddAd7643;
-    address public worker2 = 0x2B5634C42055806a59e9107ED44D43c426E58258;
+    
+    // addresses for network
+    address public flowerAddress;
+    address public medicineAddress;
+    address public worker1;
+    address public worker2;
+    address public owner;
     
     
-    
-    address public owner; 
+     
 
     modifier onlyOwner {
         require(msg.sender == owner);
@@ -49,9 +52,14 @@ contract TrackTruck {
         _;
     }
 
-    function TrackTruck()
+    function TrackTruck(address _flowerAddress, address _medicineAddress, 
+                        address _worker1, address _worker2)
     {
         owner = msg.sender;
+        flowerAddress = _flowerAddress;
+        medicineAddress = _medicineAddress;
+        worker1 = _worker1;
+        worker2 = _worker2;
         addNewPlace("Greece");
         addNewPlace("Holland");
         addNewPlace("Germany");
@@ -63,7 +71,7 @@ contract TrackTruck {
         addWorkerToCompany(flowerAddress, worker1);
         addWorkerToCompany(medicineAddress, worker2);
         addNewCargo("Red Tulip", flowerAddress, 1, worker1);
-        addNewCargo("Pharmacy", medicineAddress, 1, worker2);
+        addNewCargo("Pharmacy", medicineAddress, 2, worker2);
     }
 
     function addNewPlace(string _name) public onlyOwner returns(uint _value) {
@@ -113,6 +121,7 @@ contract TrackTruck {
     function addNewCargo(string _name, address _companyAddress, uint _place, address _targetWorker) 
     public 
     onlyCompanyMember(_companyAddress, _targetWorker) 
+    constant
     returns(uint) {
         Place place = places[_place];
         cargos[cargoAmount] = Cargo(cargoAmount, _companyAddress, _name, place);
