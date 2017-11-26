@@ -134,6 +134,7 @@ contract TrackTruck {
     onlyCompanyMember(_companyAddress, _targetWorker) 
     returns(bool) {
         stateInPlace[_cargoId] = cargoState.InDelivery;
+        return true;
     }
     
     function makeCargoDelivered(address _companyAddress, address _targetWorker, uint _cargoId) 
@@ -141,9 +142,18 @@ contract TrackTruck {
     onlyCompanyMember(_companyAddress, _targetWorker) 
     returns(bool) {
        stateInPlace[_cargoId] = cargoState.Delivered; 
+       return true;
     }
     
-    function getCargoStatus(uint _id) public returns(cargoState) {
+    function setCargoToDamaged(address _companyAddress, address _targetWorker, uint _cargoId) 
+    public 
+    onlyCompanyMember(_companyAddress, _targetWorker) 
+    returns(bool) {
+        stateInPlace[_cargoId] = cargoState.Damaged;
+        return true;
+    }
+    
+    function getCargoStatus(uint _id) public constant returns(cargoState) {
         return stateInPlace[_id];
     }
 }
